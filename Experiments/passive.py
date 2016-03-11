@@ -2,13 +2,14 @@
 Corpus, and then looks at its verbs. If somewhere in the sentence, there's a
 to-be verb and then later on a non-gerund, we'll flag the sentence as probably
 passive voice."""
-from nltk.corpus import verbnet
-from textblob import TextBlob
-import nltk
 import sys
-from nltk.stem.lancaster import LancasterStemmer
-import os
 from itertools import dropwhile
+
+import nltk
+from nltk.corpus import verbnet
+from nltk.stem.lancaster import LancasterStemmer
+from textblob import TextBlob
+
 import posttagger
 
 TAGGER = None

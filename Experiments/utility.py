@@ -1,7 +1,6 @@
-from textblob import TextBlob
-import passive
-import posttagger
 import nltk
+from textblob import TextBlob
+
 """
 Extracting sentences from document
 """
