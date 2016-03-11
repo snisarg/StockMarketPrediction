@@ -11,6 +11,7 @@ import posttagger
 punkt = nltk.tokenize.punkt.PunktSentenceTokenizer()
 headlines = pandas.read_csv('data/headlines.txt', parse_dates=[0])
 headlines = headlines[headlines['message'].notnull()]
+headlines['Date'] = headlines.msg_dt.map(pandas.datetools.normalize_date)
 
 
 def get_prices(stock_name):
@@ -26,6 +27,13 @@ def get_prices_threshold(dataframe):
 
 def headlines_for(topic):
     return headlines[headlines['message'].str.contains(topic, case=False)]
+
+
+def get_news_prices(company):
+    # The number of merged news points are less than news articles since some are published on non working days.
+    # Best case would be to pick a future price, left for later. Doing only 'inner' join for now.
+    return pandas.merge(headlines_for(company), get_prices(company), left_on='Date', right_on='Date')
+
 
 def passivep(tags):
     """Takes a list of tags, returns true if we think this is a passive
