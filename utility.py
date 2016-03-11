@@ -40,7 +40,22 @@ def passivep(tags):
     out = any(filtered)
 
     return out
+
 TAGGER = None
+def get_feature_vector(sent):
+    global TAGGER
+    TAGGER = posttagger.get_tagger()
+    findpassives(sent)
+
+
+def repl():
+    """Read eval (for passivity) print loop."""
+    try:
+        while True:
+            line = raw_input()
+            findpassives(line)
+    except EOFError,e:
+        pass
 
 def tag_sentence(sent):
     """Take a sentence as a string and return a list of (word, tag) tuples."""
@@ -53,14 +68,14 @@ def oneline(sent):
     """Replace CRs and LFs with spaces."""
     return sent.replace("\n", " ").replace("\r", " ")
 
-def get_feature_vector(sent):
+def findpassives(sent):
     # Feature extraction code here.
     """Given a sentence, tag it and print if we think it's a passive-voice
     formation."""
     lancaster_stemmer = LancasterStemmer()
     tagged = tag_sentence(sent)
     tags = map( lambda(tup): tup[1], tagged)
-
+    print sent
     if passivep(tags):
         #file.write(oneline(sent))
         blob=TextBlob(oneline(sent))
@@ -69,9 +84,10 @@ def get_feature_vector(sent):
         verb=""
         nextnoun=""
         for word, pos in blob.tags:
+            #print word,pos
             if (pos=='NN' or pos =='NNP') and flag== True:
                 prevnoun= word
-            if (pos=='VBG' or pos=='RB' or pos=='VBN') and flag==True:
+            if (pos=='VBG' or pos=='RB' or pos=='VBN'or pos=='VB') and flag==True:
                 verb=word
                 flag= False
             if (pos=='NN' or pos=='NNP') and flag== False:
@@ -100,14 +116,14 @@ def get_feature_vector(sent):
             #print word,pos
             if (pos=='NN' or pos =='NNP') and flag1== True:
                 prevnoun1= word
-            if (pos=='VBG' or pos=='RB' or pos=='VBN') and flag1==True:
+            if (pos=='VBG' or pos=='RB' or pos=='VBN'or pos=='VB') and flag1==True:
                 verb1=word
                 flag1= False
             if (pos=='NN' or pos=='NNP') and flag1== False:
                 nextnoun1=word
                 break
         lancaster_stemmer.stem(verb1)
-        print verb1
+        #print verb1
         if len(verbnet.classids(verb1))==0:
             ans= prevnoun1+" "+verb1+" "+nextnoun1+" "
         else:
@@ -115,7 +131,9 @@ def get_feature_vector(sent):
             ansstring=''.join(ans1)
             ans= prevnoun1+" "+ansstring+" "+nextnoun1+" "
         #fileans.write(ans+'\n')
-    return ans
+        print ans
+        return ans
+
 
 
 
