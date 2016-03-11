@@ -1,12 +1,15 @@
 import pandas
 
+headlines = pandas.read_csv('../data/headlines.txt', parse_dates=[0])
+headlines = headlines[headlines['message'].notnull()]
+
 
 def get_prices(stock_name):
     stock = pandas.read_csv('data/'+stock_name+'.csv', parse_dates=[0])
-    stock = stock[['Date', 'Close', 'Volume', 'Threshold Change']] # Columns we are extracting. Add more here.
+    stock = stock[['Date', 'Close', 'Volume', 'Threshold Change', 'Next day']] # Columns we are extracting. Add more here.
     return stock
 
 
-def get_headlines():
-    return pandas.read_csv('../data/headlines_20.txt', parse_dates=[0])
+def headlines_for(topic):
+    return headlines[headlines['message'].str.contains(topic, case=False)]
 
