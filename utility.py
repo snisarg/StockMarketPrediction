@@ -7,7 +7,7 @@ headlines = headlines[headlines['message'].notnull()]
 def get_prices(stock_name):
     stock = pandas.read_csv('data/'+stock_name+'.csv', parse_dates=[0])
     stock = stock[['Date', 'Close', 'Volume', 'Threshold Change', 'Next day']] # Columns we are extracting. Add more here.
-    return stock
+    return stock[stock['Threshold Change'] == '1']
 
 
 def headlines_for(topic):
