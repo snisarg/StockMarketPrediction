@@ -30,8 +30,8 @@ def get_headlines():
 
 def get_prices(stock_name):
     stock = pandas.read_csv('data/'+stock_name+'.csv', parse_dates=[0])
-    stock['Threshold Change'] = stock['Threshold Change'].replace(' ', 0).fillna(0.0).astype(float)
-    stock = stock[['Date', 'Close', 'Volume', 'Threshold Change', 'Next day', 'Price change']]
+    stock['Threshold Change'] = stock['Threshold Change'].fillna(0.0).astype(float)
+    stock = stock[['Date', 'Close', 'Volume', 'Threshold Change', 'Next day', 'Price change', 'Direction']]
     # Columns we are extracting. Add more here.
     return stock
 
@@ -52,7 +52,8 @@ def get_news_prices(company):
         # The number of merged news points are less than news articles since some are published on non working days.
         # Best case would be to pick a future price, left for later. Doing only 'inner' join for now.
         data = pandas.merge(headlines_for(company), get_prices(company), left_on='Date', right_on='Date')
-        return data.to_csv('data/'+company+'_news.csv', encoding='latin_1')
+        data.to_csv('data/'+company+'_news.csv', encoding='latin_1')
+        return data
 
 
 def __punctuation_cleaner(s):
@@ -110,11 +111,11 @@ def passivep(tags):
 
     return out
 
-TAGGER = None
+TAGGER = posttagger.get_tagger()
 def get_feature_vector(sent):
-    global TAGGER
-    TAGGER = posttagger.get_tagger()
-    findpassives(sent)
+    # global TAGGER
+    # TAGGER = posttagger.get_tagger()
+    return findpassives(sent)
 
 
 def repl():
@@ -144,7 +145,7 @@ def findpassives(sent):
     lancaster_stemmer = LancasterStemmer()
     tagged = tag_sentence(sent)
     tags = map( lambda(tup): tup[1], tagged)
-    print sent
+    # print sent
     if passivep(tags):
         #file.write(oneline(sent))
         blob=TextBlob(oneline(sent))
