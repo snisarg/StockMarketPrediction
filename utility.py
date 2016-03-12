@@ -137,7 +137,7 @@ def tag_sentence(sent):
 def oneline(sent):
     """Replace CRs and LFs with spaces."""
     return sent.replace("\n", " ").replace("\r", " ")
-
+result=[]
 def findpassives(sent):
     # Feature extraction code here.
     """Given a sentence, tag it and print if we think it's a passive-voice
@@ -145,6 +145,7 @@ def findpassives(sent):
     lancaster_stemmer = LancasterStemmer()
     tagged = tag_sentence(sent)
     tags = map( lambda(tup): tup[1], tagged)
+    ansi=[]
     # print sent
     if passivep(tags):
         #file.write(oneline(sent))
@@ -167,12 +168,20 @@ def findpassives(sent):
         #print verb
         if len(verbnet.classids(verb))==0:
             ans= prevnoun+" "+verb+" "+nextnoun+" "
+            ansi.append(prevnoun)
+            ansi.append(verb)
+            ansi.append(nextnoun)
         else:
             ans1=verbnet.classids(verb)
             ansstring=''.join(ans1)
             ans= prevnoun+" "+ansstring+" "+nextnoun+" "
-        #fileans.write(ans+'\n')
+            ansi.append(prevnoun)
+            ansi.append(ansstring)
+            ansi.append(nextnoun)
 
+        #fileans.write(ans+'\n')
+        result.append(ansi)
+        ansi=[]
         #print verbnet.classids('acclaim')
         #print "passive:", oneline(sent)
     else:
@@ -196,13 +205,25 @@ def findpassives(sent):
         #print verb1
         if len(verbnet.classids(verb1))==0:
             ans= prevnoun1+" "+verb1+" "+nextnoun1+" "
+            ansi.append(prevnoun1)
+            ansi.append(verb1)
+            ansi.append(nextnoun1)
+
         else:
             ans1=verbnet.classids(verb1)
             ansstring=''.join(ans1)
             ans= prevnoun1+" "+ansstring+" "+nextnoun1+" "
+            ansi.append(prevnoun1)
+            ansi.append(ansstring)
+            ansi.append(nextnoun1)
         #fileans.write(ans+'\n')
-        print ans
-        return ans
+        ansi.append(ans)
+    #fileans.write(ans+'\n')
+    result.append(ansi)
+    ansi=[]
+        #print ans
+
+    return result
 
 
 
