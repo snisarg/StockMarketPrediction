@@ -168,16 +168,16 @@ def findpassives(sent):
         #print verb
         if len(verbnet.classids(verb))==0:
             ans= prevnoun+" "+verb+" "+nextnoun+" "
-            ansi.append(prevnoun)
-            ansi.append(verb)
-            ansi.append(nextnoun)
+            #ansi.append(prevnoun)
+            #ansi.append(verb)
+            ansi.append(0)
         else:
-            ans1=verbnet.classids(verb)
-            ansstring=''.join(ans1)
-            ans= prevnoun+" "+ansstring+" "+nextnoun+" "
-            ansi.append(prevnoun)
-            ansi.append(ansstring)
-            ansi.append(nextnoun)
+            ans1=ans1=verbnet.lemmas()[0:3620].index(verb)
+            #ansstring=''.join(ans1)
+            #ans= prevnoun+" "+ansstring+" "+nextnoun+" "
+            #ansi.append(prevnoun)
+            #ansi.append(ansstring)
+            ansi.append(ans1)
 
         #fileans.write(ans+'\n')
         result.append(ansi)
@@ -205,19 +205,19 @@ def findpassives(sent):
         #print verb1
         if len(verbnet.classids(verb1))==0:
             ans= prevnoun1+" "+verb1+" "+nextnoun1+" "
-            ansi.append(prevnoun1)
-            ansi.append(verb1)
-            ansi.append(nextnoun1)
+            #ansi.append(prevnoun1)
+            #ansi.append(verb1)
+            ansi.append(0)
 
         else:
-            ans1=verbnet.classids(verb1)
-            ansstring=''.join(ans1)
-            ans= prevnoun1+" "+ansstring+" "+nextnoun1+" "
-            ansi.append(prevnoun1)
-            ansi.append(ansstring)
-            ansi.append(nextnoun1)
+            ans1=ans1=verbnet.lemmas()[0:3620].index(verb1)
+            #ansstring=''.join(ans1)
+            #ans= prevnoun1+" "+ansstring+" "+nextnoun1+" "
+            #ansi.append(prevnoun1)
+            #ansi.append(ansstring)
+            ansi.append(ans1)
         #fileans.write(ans+'\n')
-        ansi.append(ans)
+        #ansi.append(ans)
     #fileans.write(ans+'\n')
     result.append(ansi)
     ansi=[]
