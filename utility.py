@@ -152,12 +152,18 @@ def findpassives(sent):
         blob=TextBlob(oneline(sent))
         flag =True
         prevnoun=""
+        negative=0
+        number=0
         verb=""
         nextnoun=""
         for word, pos in blob.tags:
             #print word,pos
             if (pos=='NN' or pos =='NNP') and flag== True:
                 prevnoun= word
+            if (pos=='RB'):
+                negative=1
+            if (pos=='CD'):
+                number= word
             if (pos=='VBG' or pos=='RB' or pos=='VBN'or pos=='VB') and flag==True:
                 verb=word
                 flag= False
@@ -168,24 +174,24 @@ def findpassives(sent):
         #print verb
         if verb=="":
             ansi.append(0)
+            ansi.append(negative)
+            ansi.append(number)
         elif len(verbnet.classids(verb))==0:
             ans= prevnoun+" "+verb+" "+nextnoun+" "
-            #ansi.append(prevnoun)
-            #ansi.append(verb)
-            ansi.append(0)
-        else:
-            ans1=ans1=verbnet.lemmas()[0:3620].index(verb)
-            #ansstring=''.join(ans1)
-            #ans= prevnoun+" "+ansstring+" "+nextnoun+" "
-            #ansi.append(prevnoun)
-            #ansi.append(ansstring)
-            ansi.append(ans1)
 
+            ansi.append(0)
+            ansi.append(negative)
+            ansi.append(number)
+        else:
+            ans1=verbnet.lemmas()[0:3620].index(verb)
+
+            ansi.append(ans1)
+            ansi.append(negative)
+            ansi.append(number)
         #fileans.write(ans+'\n')
         result.append(ansi)
         ansi=[]
-        #print verbnet.classids('acclaim')
-        #print "passive:", oneline(sent)
+
     else:
         #file1.write(oneline(sent))
         blob=TextBlob(oneline(sent))
@@ -193,10 +199,16 @@ def findpassives(sent):
         prevnoun1=""
         verb1=""
         nextnoun1=""
+        negative=0
+        number=0
         for word, pos in blob.tags:
             #print word,pos
             if (pos=='NN' or pos =='NNP') and flag1== True:
                 prevnoun1= word
+            if (pos=='RB'):
+                negative=1
+            if (pos=='CD'):
+                number= word
             if (pos=='VBG' or pos=='RB' or pos=='VBN'or pos=='VB') and flag1==True:
                 verb1=word
                 flag1= False
@@ -207,25 +219,24 @@ def findpassives(sent):
         #print verb1
         if verb1=="":
             ansi.append(0)
+            ansi.append(negative)
+            ansi.append(number)
         elif len(verbnet.classids(verb1))==0:
             ans= prevnoun1+" "+verb1+" "+nextnoun1+" "
-            #ansi.append(prevnoun1)
-            #ansi.append(verb1)
+
             ansi.append(0)
+            ansi.append(negative)
+            ansi.append(number)
 
         else:
             ans1=ans1=verbnet.lemmas()[0:3620].index(verb1)
-            #ansstring=''.join(ans1)
-            #ans= prevnoun1+" "+ansstring+" "+nextnoun1+" "
-            #ansi.append(prevnoun1)
-            #ansi.append(ansstring)
+
             ansi.append(ans1)
-        #fileans.write(ans+'\n')
-        #ansi.append(ans)
-    #fileans.write(ans+'\n')
+            ansi.append(negative)
+            ansi.append(number)
     result.append(ansi)
     ansi=[]
-        #print ans
+
 
     return result
 
