@@ -7,17 +7,22 @@ from sklearn.svm import SVC
 
 goog = utility.get_news_prices('google')
 
-model = neural_network.MLPRegressor([10, 5, 8], 'relu', 'adam', 0.0001, 200, 'constant', 0.001, 0.5, 200,
-                                    True, None, 0.0001, False, False, 0.9, True, False, 0.1, 0.9, 0.999, 1e-08)
+# Select model of computation:
+# model = neural_network.MLPRegressor([10, 5, 8], 'relu', 'adam', 0.0001, 200, 'constant', 0.001, 0.5, 200,
+#                                     True, None, 0.0001, False, False, 0.9, True, False, 0.1, 0.9, 0.999, 1e-08)
 # model = RandomForestRegressor(n_estimators=50, max_features=30, max_depth=9, n_jobs=1)
-# model = SVC(kernel='linear', probability=True, random_state=40)
+model = SVC(kernel='linear', probability=True, random_state=40)
 
-model = utility.pipeline_setup(model)
+# model = utility.pipeline_setup(model)
+
 # model_fitted = model.fit(goog['message'], goog['Threshold Change'])
 
-x = goog['message']
-y = goog['Threshold Change'].astype(int)
-# y = goog['Direction']
+# Select columns:
+x = goog.message.apply(lambda sentence: utility.get_feature_vector(sentence)[0][0])
+# x = goog['message']
+print x.shape
+# y = goog['Threshold Change'].astype(int)
+y = goog['Direction']
 
 # print y
 
