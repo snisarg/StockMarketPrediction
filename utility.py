@@ -166,7 +166,9 @@ def findpassives(sent):
                 break
         lancaster_stemmer.stem(verb)
         #print verb
-        if len(verbnet.classids(verb))==0:
+        if verb=="":
+            ansi.append(0)
+        elif len(verbnet.classids(verb))==0:
             ans= prevnoun+" "+verb+" "+nextnoun+" "
             #ansi.append(prevnoun)
             #ansi.append(verb)
@@ -203,7 +205,9 @@ def findpassives(sent):
                 break
         lancaster_stemmer.stem(verb1)
         #print verb1
-        if len(verbnet.classids(verb1))==0:
+        if verb1=="":
+            ansi.append(0)
+        elif len(verbnet.classids(verb1))==0:
             ans= prevnoun1+" "+verb1+" "+nextnoun1+" "
             #ansi.append(prevnoun1)
             #ansi.append(verb1)
