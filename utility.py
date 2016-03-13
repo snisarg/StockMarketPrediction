@@ -97,6 +97,13 @@ def pipeline_setup(learning_algo):
     return pipeline
 
 
+def one_hot(list):
+    array = numpy.zeros((len(verbnet.classids())))
+    for i in list:
+        array[i] = 1
+    return array
+
+
 def passivep(tags):
     """Takes a list of tags, returns true if we think this is a passive
     sentence."""
