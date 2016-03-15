@@ -99,9 +99,11 @@ def pipeline_setup(learning_algo):
 
 
 def one_hot(list):
+    print list
     array = numpy.zeros((len(verbnet.classids())))
     for i in list:
-        array[i] = 1
+        # print i
+        array[i-1] = 1
     return array
 
 
@@ -181,24 +183,29 @@ def findpassives(sent):
         lancaster_stemmer.stem(verb)
         #print verb
         if verb=="":
-            ansi.append(0)
+            ansi.append([0])
             ansi.append(negative)
             ansi.append(number)
         elif len(verbnet.classids(verb))==0:
             ans= prevnoun+" "+verb+" "+nextnoun+" "
 
-            ansi.append(0)
+            ansi.append([0])
             ansi.append(negative)
             ansi.append(number)
         else:
-            ans1=verbnet.lemmas()[0:3620].index(verb)
-
+            #ans1=verbnet.lemmas()[0:3620].index(verb)
+            temp=verbnet.classids(verb)
+            ans1 = [verbnet.classids().index(i) for i in temp]
             ansi.append(ans1)
             ansi.append(negative)
             ansi.append(number)
         #fileans.write(ans+'\n')
         result.append(ansi)
-        ansi=[]
+        if(len(ansi)==0):
+            ansi=[[0],0,0]
+        print ansi
+        return ansi
+
 
     else:
         #file1.write(oneline(sent))
@@ -226,27 +233,32 @@ def findpassives(sent):
         lancaster_stemmer.stem(verb1)
         #print verb1
         if verb1=="":
-            ansi.append(0)
+            ansi.append([0])
             ansi.append(negative)
             ansi.append(number)
         elif len(verbnet.classids(verb1))==0:
             ans= prevnoun1+" "+verb1+" "+nextnoun1+" "
 
-            ansi.append(0)
+            ansi.append([0])
             ansi.append(negative)
             ansi.append(number)
 
         else:
-            ans1=ans1=verbnet.lemmas()[0:3620].index(verb1)
-
+            #ans1=ans1=verbnet.lemmas()[0:3620].index(verb1)
+            temp=verbnet.classids(verb1)
+            ans1 = [verbnet.classids().index(i) for i in temp]
             ansi.append(ans1)
             ansi.append(negative)
             ansi.append(number)
-    result.append(ansi)
-    ansi=[]
+
+        if(len(ansi)==0):
+            ansi=[[0],0,0]
+        print ansi
+        return ansi
 
 
-    return result
+
+
 
 
 

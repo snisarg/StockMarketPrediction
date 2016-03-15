@@ -1,29 +1,50 @@
 import utility
 from sklearn.naive_bayes import GaussianNB
+import pandas
 import numpy
 from sklearn import linear_model, cross_validation, neural_network
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVC
+from nltk.corpus import verbnet
 
 goog = utility.get_news_prices('googleold')
+# goog.append(utility.get_news_prices('microsoft'))
+# goog.append(utility.get_news_prices('apple'))
+# goog.append(utility.get_news_prices('yahoo'))
+# goog.append(utility.get_news_prices('adobe'))
 
 # Select model of computation:
-# model = neural_network.MLPRegressor([10, 5, 8], 'relu', 'adam', 0.0001, 200, 'constant', 0.001, 0.5, 200,
-#                                     True, None, 0.0001, False, False, 0.9, True, False, 0.1, 0.9, 0.999, 1e-08)
+model = neural_network.MLPRegressor([len(verbnet.classids()), 8], 'relu', 'adam', 0.0001, 200, 'constant', 0.001, 0.5, 200,
+                                     True, None, 0.0001, False, False, 0.9, True, False, 0.1, 0.9, 0.999, 1e-08)
 # model = RandomForestRegressor(n_estimators=50, max_features=30, max_depth=9, n_jobs=1)
-model = SVC(kernel='linear', probability=True, random_state=40)
+# model = SVC(kernel='linear', probability=True, random_state=40)
+#model = linear_model.LinearRegression()
 
 # model = utility.pipeline_setup(model)
 
 # model_fitted = model.fit(goog['message'], goog['Threshold Change'])
 
 # Select columns:
-x = goog.message.apply(lambda sentence: utility.get_feature_vector(sentence+".")[0][0])
+x = goog.message.apply(lambda sentence: utility.get_feature_vector(sentence+".")[0])
+# x.to_csv('data/google_msg_id.csv')
+# x = pandas.read_csv('data/google_msg_id.csv')
 print x
 # x = goog['message']
-print x.shape
-x=numpy.reshape(x,(len(x),1))
+#x = x.apply(lambda i: utility.one_hot(i))
+array = numpy.zeros((len(x), len(verbnet.classids())))
+for results in range(len(x)):
+    for i in x[results]:
+        # print i
+        array[results][i] = 1
+
+#x = x['[0]'].apply(lambda i: utility.one_hot(i))
+#x = numpy.matrix(x)
+print array.shape
+x = array
+print array
+#x=numpy.reshape(x,(len(x), (len(verbnet.classids()))))
 # y = goog['Threshold Change'].astype(int)
+# x=numpy.reshape(x,(len(x), 1))
 y = goog['Direction']
 
 # print y
