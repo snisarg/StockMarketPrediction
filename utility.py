@@ -31,6 +31,7 @@ def get_headlines():
 def get_prices(stock_name):
     stock = pandas.read_csv('data/'+stock_name+'.csv', parse_dates=[0])
     stock['Threshold Change'] = stock['Threshold Change'].fillna(0.0).astype(float)
+    stock['Direction'] = stock['Direction'].fillna(0.0).astype(float)
     stock = stock[['Date', 'Close', 'Volume', 'Threshold Change', 'Next day', 'Price change', 'Direction']]
     # Columns we are extracting. Add more here.
     return stock

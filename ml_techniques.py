@@ -1,11 +1,11 @@
 import utility
 from sklearn.naive_bayes import GaussianNB
 import numpy
-from sklearn.sklearn import linear_model, cross_validation, neural_network
+from sklearn import linear_model, cross_validation, neural_network
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVC
 
-goog = utility.get_news_prices('google')
+goog = utility.get_news_prices('googleold')
 
 # Select model of computation:
 # model = neural_network.MLPRegressor([10, 5, 8], 'relu', 'adam', 0.0001, 200, 'constant', 0.001, 0.5, 200,
@@ -18,9 +18,11 @@ model = SVC(kernel='linear', probability=True, random_state=40)
 # model_fitted = model.fit(goog['message'], goog['Threshold Change'])
 
 # Select columns:
-x = goog.message.apply(lambda sentence: utility.get_feature_vector(sentence)[0][0])
+x = goog.message.apply(lambda sentence: utility.get_feature_vector(sentence+".")[0][0])
+print x
 # x = goog['message']
 print x.shape
+x=numpy.reshape(x,(len(x),1))
 # y = goog['Threshold Change'].astype(int)
 y = goog['Direction']
 
